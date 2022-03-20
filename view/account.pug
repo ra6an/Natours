@@ -1,0 +1,108 @@
+extends base
+
+mixin navItem(link, text, icon, data, active)
+  li(class=`liste ${active ? 'side-nav--active' : ''}`, data-set=`${data}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
+block content 
+  main.main
+    .user-view(data-userId=`${user.id}`)
+      nav.user-view__menu
+        ul.side-nav
+          +navItem('#', 'Settings', 'settings', '1', true)
+          +navItem('#', 'My bookings', 'briefcase', '2')
+          +navItem('#', 'My reviews', 'star', '3')
+          +navItem('#', 'Billing', 'credit-card', '4')
+
+        - if(user.role === 'admin')
+          .admin-nav
+            h5.admin-nav__heading Admin
+            ul.side-nav
+              +navItem('#', 'Manage tours', 'map', '5')
+              +navItem('#', 'Manage users', 'users', '6')
+              +navItem('#', 'Manage reviews', 'star', '7')
+              +navItem('#', 'Manage bookings', 'briefcase', '8')
+
+      .user-view__content-1.for__loop
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your account settings
+
+          //- Witouth API
+          //- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data')
+
+          //- With API
+          form.form.form-user-data
+            .form__group
+              label.form__label(for='name') Name
+              input#name.form__input(type='text', value=`${user.name}`, required, name='name')
+            .form__group.ma-bt-md
+              label.form__label(for='email') Email address
+              input#email.form__input(type='email', value=`${user.email}`, required, name='email')
+            .form__group.form__photo-upload
+              img.form__user-photo(src=`/img/users/${user.photo !== undefined ? user.photo : 'default.jpg'}`, alt='User photo')
+
+              input.form__upload(type='file', accept='image/*', id='photo', name='photo')
+              label(for='photo') Chose new photo
+              //- a.btn-text(href='') Choose new photo
+            .form__group.right
+              button.btn.btn--small.btn--green Save settings
+
+        .line &nbsp;
+
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Password change
+          //- h2= user
+          form.form.form-user-password
+            .form__group
+              label.form__label(for='password-current') Current password
+              input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group
+              label.form__label(for='password') New password
+              input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group.ma-bt-lg
+              label.form__label(for='password-confirm') Confirm password
+              input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+            .form__group.right
+              button.btn.btn--small.btn--green.btn--save-password Save password
+
+      //-booking options USER
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-2.for__loop.hidden
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your bookings
+
+      //- review options USER
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-3.for__loop.hidden
+        .user-view__form-container
+          h2.heading-secondary.ma-bt-md Your reviews
+
+      //- billing options USER
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-4.for__loop.hidden
+
+      //- tours options ADMIN
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-5.for__loop.hidden
+
+      //- users options ADMIN
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-6.for__loop.hidden
+
+      //- reviews options ADMIN
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-7.for__loop.hidden
+
+      //- bookings options ADMIN
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      //- /////////////////////////////////////////////////////////////////////////////////////
+      .user-view__content-8.for__loop.hidden
